@@ -1,5 +1,17 @@
 // Docs on event and context https://docs.netlify.com/functions/build/#code-your-function-2
-export default async function handler() {
+export default async function handler(event) {
+    const headers = {
+        "Access-Control-Allow-Origin": "https://soham-kbcapp.netlify.app/", // Change "*" to your frontend URL for better security
+        "Access-Control-Allow-Headers": "Content-Type",
+    };
+
+    if (event.httpMethod === "OPTIONS") {
+        return {
+            statusCode: 200,
+            headers,
+            body: "", // No content for OPTIONS
+        };
+    }
     try {
         const resp = await fetch(
             "https://the-trivia-api.com/api/questions?categories=general_knowledge&limit=10&difficulty=easy"
@@ -30,19 +42,16 @@ export default async function handler() {
         });
 
         const body = JSON.stringify(transformedDataArray);
-        return new Response(body, {
-            headers: {
-                "content-type": "application/json",
-            },
-        });
+        return {
+            statusCode: 200,
+            headers,
+            body,
+        };
     } catch (error) {
-        return new Response(
-            JSON.stringify({ statusCode: 500, message: error.toString() }),
-            {
-                headers: {
-                    "content-type": "application/json",
-                },
-            }
-        );
+        return {
+            statusCode: 500,
+            headers,
+            body: JSON.stringify({ error: error.message }),
+        };
     }
 }
