@@ -1,7 +1,7 @@
 // Docs on event and context https://docs.netlify.com/functions/build/#code-your-function-2
 export default async function handler(event) {
     const headers = {
-        "Access-Control-Allow-Origin": "https://soham-kbcapp.netlify.app/", // Change "*" to your frontend URL for better security
+        "Access-Control-Allow-Origin": "https://soham-kbcapp.netlify.app", // Change "*" to your frontend URL for better security
         "Access-Control-Allow-Headers": "Content-Type",
     };
 
