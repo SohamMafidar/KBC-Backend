@@ -2,6 +2,7 @@
 export default async function handler(event) {
     const headers = {
         "Access-Control-Allow-Origin": "https://soham-kbcapp.netlify.app", // Change "*" to your frontend URL for better security
+        "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type",
     };
 
