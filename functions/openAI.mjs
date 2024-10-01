@@ -10,9 +10,8 @@ export async function handler(event, context) {
     // Handle preflight OPTIONS request
     if (event.httpMethod === "OPTIONS") {
         return {
-            statusCode: 200,
+            statusCode: 204,
             headers,
-            body: "", // No content for OPTIONS
         };
     }
     // Check if method is POST
