@@ -8,9 +8,8 @@ export default async function handler(event) {
 
     if (event.httpMethod === "OPTIONS") {
         return {
-            statusCode: 200,
+            statusCode: 204,
             headers,
-            body: "", // No content for OPTIONS
         };
     }
     try {
