@@ -4,6 +4,7 @@ export default async function handler(event) {
         "Access-Control-Allow-Origin": "*", // Change "*" to your frontend URL for better security
         "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type",
+        "Content-Type": "application/json", // Make sure Content-Type is set correctly
     };
 
     if (event.httpMethod === "OPTIONS") {
@@ -13,6 +14,7 @@ export default async function handler(event) {
         };
     }
     try {
+        console.log("Fetching trivia data");
         const resp = await fetch(
             "https://the-trivia-api.com/api/questions?categories=general_knowledge&limit=10&difficulty=easy"
         );
@@ -20,7 +22,18 @@ export default async function handler(event) {
             throw new Error(`HTTP error! Status: ${resp.status}`);
         }
         const data = await resp.json();
+        if (!Array.isArray(data)) {
+            throw new Error("Unexpected response format from trivia API");
+        }
+        console.log("Transforming trivia data");
         const transformedDataArray = data.map((jsonData) => {
+            if (
+                !jsonData.question ||
+                !jsonData.correctAnswer ||
+                !Array.isArray(jsonData.incorrectAnswers)
+            ) {
+                throw new Error("Missing required fields in trivia data");
+            }
             const shuffledAnswers = [...jsonData.incorrectAnswers];
             shuffledAnswers.push(jsonData.correctAnswer);
 
@@ -42,6 +55,7 @@ export default async function handler(event) {
         });
 
         const body = JSON.stringify(transformedDataArray);
+        console.log("Returning success response");
         return {
             statusCode: 200,
             headers,
@@ -51,7 +65,9 @@ export default async function handler(event) {
         return {
             statusCode: 500,
             headers,
-            body: JSON.stringify({ error: error.message }),
+            body: JSON.stringify({
+                error: error.message || "Internal server error",
+            }),
         };
     }
 }
