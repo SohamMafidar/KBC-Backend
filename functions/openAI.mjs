@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function handler(event, context) {
     const headers = {
-        "Access-Control-Allow-Origin": "https://soham-kbcapp.netlify.app/", // Change "*" to your frontend URL for better security
+        "Access-Control-Allow-Origin": "*", // Change "*" to your frontend URL for better security
         "Access-Control-Allow-Methods": "POST, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type",
     };
