@@ -54,20 +54,18 @@ export default async function handler(event) {
             };
         });
 
-        const body = JSON.stringify(transformedDataArray);
         console.log("Returning success response");
-        return {
-            statusCode: 200,
+        return new Response(JSON.stringify(transformedDataArray), {
+            status: 200,
             headers,
-            body,
-        };
+        });
     } catch (error) {
-        return {
-            statusCode: 500,
-            headers,
-            body: JSON.stringify({
-                error: error.message || "Internal server error",
-            }),
-        };
+        return new Response(
+            JSON.stringify({ error: error.message || "Internal Server Error" }),
+            {
+                status: 500,
+                headers,
+            }
+        );
     }
 }
